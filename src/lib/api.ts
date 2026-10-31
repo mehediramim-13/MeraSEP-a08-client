@@ -277,8 +277,8 @@ export async function deleteEvent(id: string): Promise<void> {
  * TODO(mehedi): POST `${API_BASE_URL}${ENDPOINTS.joinEvent(id)}` with the JWT.
  * The server should make this idempotent and return the updated count.
  */
-export async function joinEvent(id: string): Promise<MeraEvent> {
-  const email = getCurrentUserEmail();
+export async function joinEvent(id: string, emailParam?: string): Promise<MeraEvent> {
+  const email = emailParam || getCurrentUserEmail();
   if (!email) {
     throw new Error("Please sign in to join this event.");
   }
@@ -298,8 +298,8 @@ export async function joinEvent(id: string): Promise<MeraEvent> {
  * TODO(mehedi): GET `${API_BASE_URL}${ENDPOINTS.joinedEvents}` with the JWT and
  * return the events plus `userEmail` and `joinedAt`.
  */
-export async function getJoinedEvents(): Promise<JoinedEvent[]> {
-  const email = getCurrentUserEmail();
+export async function getJoinedEvents(emailParam?: string): Promise<JoinedEvent[]> {
+  const email = emailParam || getCurrentUserEmail();
   if (!email) return [];
 
   const joins = getUserJoins(email);
