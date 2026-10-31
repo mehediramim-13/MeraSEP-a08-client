@@ -20,21 +20,27 @@ const TEXT_SIZES: Record<LogoSize, string> = {
 interface LogoProps {
   size?: LogoSize;
   showWordmark?: boolean;
+  tone?: "default" | "inverse";
   className?: string;
   href?: string;
   priority?: boolean;
+  /** Called when the linked logo is activated (used to close mobile menus). */
+  onClick?: () => void;
 }
 
 /**
  * The one MeraSEP logo component. The mark is an SVG; the wordmark is real
- * text so "SEP" can follow the primary colour in both themes.
+ * text so "SEP" can follow the primary colour in both themes. `tone="inverse"`
+ * is used on dark surfaces such as the footer and auth brand panel.
  */
 export function Logo({
   size = "md",
   showWordmark = true,
+  tone = "default",
   className,
   href,
   priority = false,
+  onClick,
 }: LogoProps) {
   const content = (
     <span className={cn("inline-flex items-center gap-2.5 align-middle", className)}>
@@ -55,8 +61,8 @@ export function Logo({
             TEXT_SIZES[size],
           )}
         >
-          <span className="text-foreground">Mera</span>
-          <span className="text-primary">SEP</span>
+          <span className={tone === "inverse" ? "text-white" : "text-foreground"}>Mera</span>
+          <span className={tone === "inverse" ? "text-emerald-300" : "text-primary"}>SEP</span>
         </span>
       ) : null}
     </span>
@@ -67,6 +73,7 @@ export function Logo({
       <Link
         href={href}
         aria-label="MeraSEP home"
+        onClick={onClick}
         className="group/logo inline-flex rounded-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
       >
         {content}
