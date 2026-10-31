@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { Bookmark, Calendar, CalendarPlus, Check, Copy, LoaderCircle, MapPin } from "lucide-react";
 import { toast } from "sonner";
@@ -21,6 +22,7 @@ interface EventDetailsProps {
 }
 
 export function EventDetails({ event }: EventDetailsProps) {
+  const router = useRouter();
   const { user } = useAuth();
   const { isSaved, toggleSaved } = useSavedEvents();
   const meta = EVENT_META[event.eventType];
@@ -38,9 +40,11 @@ export function EventDetails({ event }: EventDetailsProps) {
 
   useEffect(() => {
     let active = true;
-    getJoinedEvents()
+    getJoinedEvents(user?.email || "")
       .then((list) => {
-        if (active) setIsJoined(list.some((item) => item._id === event._id));
+        if (active) {
+          setIsJoined(user?.email ? list.some((item) => item._id === event._id) : false);
+        }
       })
       .catch(() => {
         if (active) setIsJoined(false);
@@ -48,7 +52,7 @@ export function EventDetails({ event }: EventDetailsProps) {
     return () => {
       active = false;
     };
-  }, [event._id]);
+  }, [event._id, user?.email]);
 
   useEffect(() => {
     const timer = setInterval(() => setCountdown(getCountdown(event.eventDate)), 1000);
@@ -72,11 +76,14 @@ export function EventDetails({ event }: EventDetailsProps) {
   }, [event._id, event.eventType]);
 
   const handleJoin = async () => {
-    // TODO(mehedi): if not logged in, redirect to `/login?redirect=/events/${event._id}`
-    // with an info toast instead of joining.
+    if (!user) {
+      toast.info("Please sign in to join this event.");
+      router.push(`/login?callbackUrl=/events/${event._id}`);
+      return;
+    }
     setJoining(true);
     try {
-      await joinEvent(event._id);
+      await joinEvent(event._id, user.email);
       setJoinedCount((current) => current + 1);
       setIsJoined(true);
       toast.success("You're in! See you at the event.");
