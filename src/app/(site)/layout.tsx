@@ -10,7 +10,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <ScrollProgress />
-      <Navbar />
+     <Navbar></Navbar>
       <div className="flex flex-1 flex-col">{children}</div>
       <Footer />
       <BackToTop />

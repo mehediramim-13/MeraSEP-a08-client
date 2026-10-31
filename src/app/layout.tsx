@@ -76,6 +76,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
       className={cn("h-full", inter.variable, plusJakarta.variable)}
     >
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground antialiased">
