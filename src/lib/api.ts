@@ -90,10 +90,7 @@ function slugify(value: string): string {
     .slice(0, 48);
 }
 
-/**
- * Adapter for slightly different JSON shapes. Accepts `_id` or `id`, missing
- * optional fields, numeric counts as strings, and unknown event types.
- */
+
 export function normalizeEvent(raw: unknown, index = 0): MeraEvent {
   const source = isRecord(raw) ? raw : {};
   const title = asString(source.title, "Community event");
@@ -251,11 +248,6 @@ export async function getMyEvents(): Promise<MeraEvent[]> {
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
-/**
- * PATCH /events/:id
- * TODO(mehedi): PATCH `${API_BASE_URL}${ENDPOINTS.eventById(id)}` with the JWT
- * and the partial payload, then return the updated event.
- */
 export async function updateEvent(id: string, data: UpdateEventInput): Promise<MeraEvent> {
   const existing = await getEventById(id);
   if (!existing) throw new Error("This event no longer exists.");
@@ -264,19 +256,11 @@ export async function updateEvent(id: string, data: UpdateEventInput): Promise<M
   return { ...existing, ...data };
 }
 
-/**
- * DELETE /events/:id
- * TODO(mehedi): DELETE `${API_BASE_URL}${ENDPOINTS.eventById(id)}` with the JWT.
- */
+
 export async function deleteEvent(id: string): Promise<void> {
   removeEvent(id);
 }
 
-/**
- * POST /events/:id/join
- * TODO(mehedi): POST `${API_BASE_URL}${ENDPOINTS.joinEvent(id)}` with the JWT.
- * The server should make this idempotent and return the updated count.
- */
 export async function joinEvent(id: string, emailParam?: string): Promise<MeraEvent> {
   const email = emailParam || getCurrentUserEmail();
   if (!email) {
