@@ -14,6 +14,7 @@ import {
   DEMO_USER,
   getAuthUser,
   getCurrentUserEmail,
+  setAuthUser,
   writeProfileOverlay,
 } from "@/lib/auth-client";
 import { EVENTS_LIST_URL } from "@/lib/api-config";
@@ -331,6 +332,7 @@ export async function updateProfile(data: ProfileUpdateInput): Promise<AppUser> 
   // The profile overlay lives with the placeholder auth client so the preview
   // session and the form stay in sync. Replace with the BetterAuth session.
   writeProfileOverlay(updated);
+  setAuthUser(updated);
   return updated;
 }
 
