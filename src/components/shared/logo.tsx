@@ -39,7 +39,7 @@ export function Logo({
   tone = "default",
   className,
   href,
-  priority = false,
+  priority = true,
   onClick,
 }: LogoProps) {
   const content = (
@@ -51,6 +51,7 @@ export function Logo({
         width={MARK_SIZES[size]}
         height={MARK_SIZES[size]}
         priority={priority}
+        loading="eager"
         unoptimized
         className="shrink-0 drop-shadow-[0_4px_12px_rgba(5,150,105,0.25)] transition-transform duration-300 group-hover/logo:-rotate-6 group-hover/logo:scale-105"
       />
