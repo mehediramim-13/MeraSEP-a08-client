@@ -17,8 +17,9 @@ export const registerSchema = z.object({
   image: z
     .string()
     .trim()
-    .min(1, "Photo URL is required")
-    .url("Enter a valid image URL"),
+    .url("Enter a valid image URL")
+    .or(z.literal(""))
+    .optional(),
   password: z
     .string()
     .min(6, "Password must be at least 6 characters")
